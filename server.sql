@@ -3,8 +3,8 @@ CREATE DATABASE honors_program;
 
 CREATE TABLE user_info
 (
-   userid varchar(20) NOT NULL PRIMARY KEY,
-   password varchar(20) NOT NULL,
+   userid varchar(25) NOT NULL PRIMARY KEY,
+   password varchar(25) NOT NULL,
    isadmin varchar(1) NOT NULL
 );
 
