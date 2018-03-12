@@ -4,7 +4,7 @@ CREATE DATABASE honors_program;
 CREATE TABLE user_info
 (
    userid varchar(25) NOT NULL PRIMARY KEY,
-   password varchar(25) NOT NULL,
+   password varchar(5000) NOT NULL,
    isadmin varchar(1) NOT NULL
 );
 
