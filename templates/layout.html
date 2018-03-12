@@ -50,7 +50,7 @@
       <div id="navbarResponsive">
         <ul class="nav navbar-nav navbar-right main-nav">
           {% if loggedIn == True %}
-          <li><a><font color="white">Welcome, {{user}}</font></a></li>
+          <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}</font></a></li>
           <li>
           <form method="post" action="/logout">
           <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
