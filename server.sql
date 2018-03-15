@@ -1,4 +1,7 @@
+DROP DATABASE honors_program;
+
 CREATE DATABASE honors_program;
+
 \c honors_program;
 
 CREATE TABLE user_info
@@ -39,11 +42,12 @@ CREATE TABLE student_info
    hn_course_4_date date
 );
 
+DROP ROLE umwhonors;
+CREATE ROLE umwhonors WITH LOGIN;
+ALTER ROLE umwhonors WITH PASSWORD 'umw';
+
+GRANT ALL ON user_info, announcements, student_info TO umwhonors;
 
 
-
-
-	
-
-	
-	
+INSERT into user_info values ('Adam', 'password', 'y');
+INSERT into user_info values ('Jack', 'password', 'n');

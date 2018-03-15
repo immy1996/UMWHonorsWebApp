@@ -47,35 +47,31 @@
 <body>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
     <div class="container">
       <img src="http://www.umw.edu/wp-content/mu-plugins/images/umw-primary-logo-white.png">
       <div id="navbarResponsive">
         <ul class="nav navbar-nav navbar-right main-nav">
-          {% if loggedIn == True %}
-          <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}</font></a></li>
+          {% if loggedIn == True and admin == True  %}
+          <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
+          <li>
+          <form method="post" action="/logout">
+          <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
+          </form>
+          </li>
+          {% elif loggedIn == True and student == False %}
+          <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Student</font></a></li>
           <li>
           <form method="post" action="/logout">
           <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
           </form>
           </li>
           {% else %}
-          {% endif %}
-
-          {% if loggedIn == False %}
           <li>
             <a class="nav-link" href="#">Home
                 <span class="sr-only">(current)</span>
               </a>
           </li>
-          <li>
-            <!-- Button to open the modal login form -->
-            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#loginModal">
-               Login &raquo;
-              </button>
-          </li>
-          {% endif %}
-          {% if loggedIn %}
           <li>
             <a class="nav-link" href="#">About</a>
           </li>
@@ -84,7 +80,12 @@
           </li>
           <li>
             <a class="nav-link" href="#">Contact</a>
-          {% else %}
+          <li>
+            <!-- Button to open the modal login form -->
+            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#loginModal">
+               Login &raquo;
+              </button>
+          </li>
 
           {% endif %}
 
@@ -95,7 +96,7 @@
   </nav>
 
   <!-- Page Content -->
-  <div class="container">
+  <div class="container body-content">
     <div id="content">
       {% block content %} {% endblock %}
     </div>

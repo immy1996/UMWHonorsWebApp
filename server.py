@@ -25,6 +25,8 @@ def mainIndex():
     except:
         session['username'] = ''
         
+    adminT = False
+    studentT = False    
         
      # if user typed in a post ...
     if request.method == 'POST':
@@ -34,10 +36,28 @@ def mainIndex():
           try: 
             print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
+            
+            returnedUserInfo = cursor.fetchall()
+            print(returnedUserInfo)
+            for row in returnedUserInfo:
+                print row[2]
+                print"    ", returnedUserInfo
+                print("before isAdmin is equal to yes")
+                print row[2]
+                if row[2] == 'y':
+                  print("After isAdmin is equal to yes")
+                  adminT = True
+                elif row[2] == 'n':
+                  print("Student is equal to isAdmin")
+                  studentT = True
+
+
             if cursor.fetchone():
               print("got here")
               session['username'] = username
-              session['loggedIn']=True 
+              session['loggedIn']=True
+              print adminT
+              print studentT
             else:
               session['loggedIn']=False
               session['username']=''
@@ -50,12 +70,12 @@ def mainIndex():
         print("Nobody is currently logged in.") 
     else:
        session['loggedIn'] = True
-       print('User: ' + session['username'])
+       print('User: ' + session['username'] + ' is logged in')
     
     connection.commit()
 
     
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'])
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], admin = adminT, student = studentT)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
