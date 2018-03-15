@@ -47,8 +47,10 @@ def mainIndex():
                 if row[2] == 'y':
                   print("After isAdmin is equal to yes")
                   adminT = True
+                  studentT = False
                 elif row[2] == 'n':
                   print("Student is equal to isAdmin")
+                  adminT = False
                   studentT = True
 
 
