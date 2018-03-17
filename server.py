@@ -143,6 +143,10 @@ def logout():
     session['username'] = ''
     session['loggedIn'] = False
     return redirect(url_for('mainIndex'))
+    
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    return render_template('contact.html')
   
 # start the server
 if __name__ == '__main__':
