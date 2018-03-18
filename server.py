@@ -3,6 +3,7 @@ import psycopg2, psycopg2.extras, os
 app = Flask(__name__)
 import psycopg2, psycopg2.extras, os, random
 import uuid
+import pprint
 
 
 app = Flask(__name__, static_url_path='')
@@ -19,7 +20,8 @@ def connectToDB():
 def mainIndex():
     #connecting to database
     connection = connectToDB()
-    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor = connection.cursor()
     try:
         print('User: ' + session['username'])
     except:
@@ -27,6 +29,7 @@ def mainIndex():
         
     adminT = False
     studentT = False    
+    userIsAdmin = False
         
      # if user typed in a post ...
     if request.method == 'POST':
@@ -37,10 +40,12 @@ def mainIndex():
             print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
             
-            returnedUserInfo = cursor.fetchall()
-            print(returnedUserInfo)
+            returnedUserInfo = cursor.fetchone()
+            
+            pprint.pprint(returnedUserInfo)
+            
             for row in returnedUserInfo:
-                print row[2]
+                print row[0]
                 print"    ", returnedUserInfo
                 print("before isAdmin is equal to yes")
                 print row[2]
@@ -75,9 +80,8 @@ def mainIndex():
        print('User: ' + session['username'] + ' is logged in')
     
     connection.commit()
-
     
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], admin = adminT, student = studentT)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -111,12 +115,23 @@ def login():
             #Execute on the db
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
 
+            returnedUserInfo = cursor.fetchone()
+            
             #If a user-pwd combo was found and it matches then log the person in
-            if cursor.fetchone():
-              print("got here")
+            if returnedUserInfo:
+              print("username and password match found...")
               SignedInButton = False
               session['username'] = username
               session['loggedIn']=True 
+              
+              #print("Attempting cursor fetch")
+              #returnedUserInfo = cursor.fetchone()
+              
+              if returnedUserInfo[2] == 'y':
+                print("We are an admin")
+              else:
+                print("We are a student")
+              
               return redirect(url_for('mainIndex'))
             #If not, then they aren't logged in, you want to put something here to let the person know that it did not work out
             else:
