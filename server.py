@@ -42,29 +42,22 @@ def mainIndex():
             
             returnedUserInfo = cursor.fetchone()
             
-            pprint.pprint(returnedUserInfo)
-            
-            for row in returnedUserInfo:
-                print row[0]
-                print"    ", returnedUserInfo
-                print("before isAdmin is equal to yes")
-                print row[2]
-                if row[2] == 'y':
-                  print("After isAdmin is equal to yes")
-                  adminT = True
-                  studentT = False
-                elif row[2] == 'n':
-                  print("Student is equal to isAdmin")
-                  adminT = False
-                  studentT = True
-
-
-            if cursor.fetchone():
-              print("got here")
+            #If a user-pwd combo was found and it matches then log the person in
+            if returnedUserInfo:
+              print("username and password match found...")
+              SignedInButton = False
               session['username'] = username
-              session['loggedIn']=True
-              print adminT
-              print studentT
+              session['loggedIn']=True 
+              
+              #print("Attempting cursor fetch")
+              #returnedUserInfo = cursor.fetchone()
+              
+              if returnedUserInfo[2] == 'y':
+                print("We are an admin")
+                userIsAdmin = True
+              else:
+                print("We are a student")
+                userIsAdmin = False
             else:
               session['loggedIn']=False
               session['username']=''
