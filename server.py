@@ -30,12 +30,14 @@ def mainIndex():
     adminT = False
     studentT = False    
     userIsAdmin = False
-        
+
      # if user typed in a post ...
     if request.method == 'POST':
           username = request.form['userName']
           print('incoming username ' + username)
           pw = request.form['pw']
+          session['SignedInButton'] = False
+          SignedInButton = session['SignedInButton']
           try: 
             print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
@@ -61,6 +63,9 @@ def mainIndex():
             else:
               session['loggedIn']=False
               session['username']=''
+              SignedInButton = True
+              return render_template('login.html', failed = SignedInButton)
+              
           except:
             print("Error accesing from users table when logging in")
             print(cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw)))
@@ -73,7 +78,7 @@ def mainIndex():
        print('User: ' + session['username'] + ' is logged in')
     
     connection.commit()
-    
+
     return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -107,7 +112,7 @@ def login():
 
             #Execute on the db
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
-
+            
             returnedUserInfo = cursor.fetchone()
             
             #If a user-pwd combo was found and it matches then log the person in
@@ -122,27 +127,24 @@ def login():
               
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
+                userIsAdmin = True
               else:
                 print("We are a student")
-              
-              return redirect(url_for('mainIndex'))
-            #If not, then they aren't logged in, you want to put something here to let the person know that it did not work out
+                userIsAdmin = False
             else:
-              print("Invalid username or password!")
-              connection.rollback()
-              SignedInButton = True
               session['loggedIn']=False
               session['username']=''
-              print("before return statement")
-              return render_template('login.html', failed = SignedInButton, loggedIn=session['loggedIn'], user=session['username'])
+              SignedInButton = True
+              return render_template('login.html', failed = SignedInButton)
           except:
-            print("after return statement")
-            print("Error accesing from users table when logging in whyyyy")
-            #print(cursor.execute("select * from user_info WHERE userid = %s AND password = crypt(%s, password);" , (username, pw)))
+              print("after return statement")
+              print("Error accesing from users table when logging in whyyyy")
+              #print(cursor.execute("select * from user_info WHERE userid = %s AND password = crypt(%s, password);" , (username, pw)))
 
     print('Username: ' + session['username'])
     
     #Go to home page
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
