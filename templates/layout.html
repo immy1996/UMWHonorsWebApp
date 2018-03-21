@@ -15,9 +15,10 @@
 
   <!-- Bootstrap core CSS -->
   <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+  
   <!-- Custom styles for this template -->
   <link href="static/css/heroic-features.css" rel="stylesheet">
+  <link href="static/css/user-features.css" rel="stylesheet">
 
 
   <style type="text/css">
@@ -56,12 +57,36 @@
                 <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
                 <li><a class="nav-link" href="/announcement">Post Announcements</a></li>
                 <li>
+                  <a class="nav-link" href="/">Home</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="#">About</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="#">Services</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li>
                 <form method="post" action="/logout">
                 <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
                 </form>
                 </li>
           {% elif  loggedIn == True and adminView == False %}
                 <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Student</font></a></li>
+                <li>
+                  <a class="nav-link" href="/">Home</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="#">About</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="#">Services</a>
+                </li>
+                <li>
+                  <a class="nav-link" href="/contact">Contact</a>
+                </li>
                 <li>
                 <form method="post" action="/logout">
                 <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>

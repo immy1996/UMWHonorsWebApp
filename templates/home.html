@@ -1,68 +1,104 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
+   {% if loggedIn == True and adminView == True  %}
       <!-- Jumbotron Header -->
       <header class="jumbotron my-4">
-        <h1 class="display-3">A Warm Welcome!</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-        <a href="#" class="btn btn-primary btn-lg">Call to action!</a>
-      </header>
+         <h1 class="display-3">Announcements</h1>
+         <p class="lead">Announcements will go here</p>
+       </header>
 
       <!-- Page Features -->
-      <div class="row text-center">
+      <div class="row text-center" style="justify-content: center;">
 
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
-            <div class="card-body">
-              <h4 class="card-title">Card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="btn btn-primary">Find Out More!</a>
+         <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card">
+              <img class="card-img-top" src="https://png.icons8.com/metro/1600/search.png">
+              <div class="card-body">
+                <h4 class="card-title">Search for a Student</h4>
+                <p class="card-text">Click here to search for a studnet's progress in the Honors Program</p>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="btn btn-primary">Search</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
-            <div class="card-body">
-              <h4 class="card-title">Card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="btn btn-primary">Find Out More!</a>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card">
+              <img class="card-img-top" src="https://image.flaticon.com/icons/svg/28/28842.svg" alt="">
+              <div class="card-body">
+                <h4 class="card-title">Upload CSV</h4>
+                <p class="card-text">Upload a CSV file containing student's information for the Honors Program.</p>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="btn btn-primary">Upload</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
-            <div class="card-body">
-              <h4 class="card-title">Card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="btn btn-primary">Find Out More!</a>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card">
+              <img class="card-img-top" src="https://cdn1.iconfinder.com/data/icons/education-set-3/512/announcement-512.png" alt="">
+              <div class="card-body">
+                <h4 class="card-title">Post Announcement</h4>
+                <p class="card-text">Post a new announcement for student's to view.</p>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="btn btn-primary">Post</a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
-            <div class="card-body">
-              <h4 class="card-title">Card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
-          </div>
-        </div>
 
       </div>
       <!-- /.row -->
+   {% elif loggedIn == True and adminView == False  %}
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+         <h1 class="display-3">Announcements</h1>
+         <p class="lead">Announcements will go here</p>
+       </header>
+ 
+       <!-- Page Features -->
+       <div class="row text-center" style="justify-content: center;">
+ 
+         <div class="col-lg-3 col-md-6 mb-4">
+           <div class="card">
+             <img class="card-img-top" src="https://cdn2.iconfinder.com/data/icons/business-office-icons/256/To-do_List-512.png">
+             <div class="card-body">
+               <h4 class="card-title">View Progress</h4>
+               <p class="card-text">View your progress in the Honors Program.</p>
+             </div>
+             <div class="card-footer">
+               <a href="#" class="btn btn-primary">Click to View</a>
+             </div>
+           </div>
+         </div>
+ 
+         <div class="col-lg-3 col-md-6 mb-4">
+           <div class="card">
+             <img class="card-img-top" src="https://cdn1.iconfinder.com/data/icons/education-set-3/512/announcement-512.png" alt="">
+             <div class="card-body">
+               <h4 class="card-title">View Announcements</h4>
+               <p class="card-text">View announcements posted by administrators.</p>
+             </div>
+             <div class="card-footer">
+               <a href="#" class="btn btn-primary">Upload</a>
+             </div>
+           </div>
+         </div>
+       </div>
+       <!-- /.row -->
+      {% else %}
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+         <h1 class="display-3">Homepage Test</h1>
+         <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+         <a href="#" class="btn btn-primary btn-lg">Call to action!</a>
+       </header>
+ 
+       <!-- /.row -->
+   {% endif %}
+
 {% endblock %}

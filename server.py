@@ -33,7 +33,7 @@ def mainIndex():
     returnedUserInfo = ''
 
     print("BEFORE POST")
-    print(session['admin']) 
+    #print(session['admin']) 
 
      # if user typed in a post ...
     if request.method == 'POST':
@@ -80,7 +80,7 @@ def mainIndex():
        print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
 
     print("AFTER POST")
-    print(session['admin'] )
+    #print(session['admin'] )
 
 
     print("PRINT RETURNEDUSERINFO BEFORE COMMIT")
