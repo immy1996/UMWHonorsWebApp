@@ -52,25 +52,21 @@
       <img src="http://www.umw.edu/wp-content/mu-plugins/images/umw-primary-logo-white.png">
       <div id="navbarResponsive">
         <ul class="nav navbar-nav navbar-right main-nav">
-          {% if loggedIn == True %}
-            {% if adminView == True %}
+          {% if loggedIn == True and adminView == True  %}
                 <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
-                <li><a class="nav-link" href="/announcement">Post Announcements</a></li>
+                <li><a href="/announcement">Post Announcements</a></li>
                 <li>
                 <form method="post" action="/logout">
                 <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
                 </form>
                 </li>
-            {% elif adminView == False %}
+          {% elif  loggedIn == True and adminView == False %}
                 <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Student</font></a></li>
                 <li>
                 <form method="post" action="/logout">
                 <button id="Logout" name="Logout" class="btn btn-primary">Logout</button>
                 </form>
                 </li>
-            {% else %}
-            {% endif %}
-           
           {% elif loggedIn == False %}
           <li>
             <a class="nav-link" href="/">Home</a>

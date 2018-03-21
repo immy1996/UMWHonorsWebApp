@@ -5,7 +5,7 @@ import psycopg2, psycopg2.extras, os, random
 import uuid
 import pprint
 
-userIsAdmin = False 
+userIsAdmin = False
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
