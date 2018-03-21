@@ -5,6 +5,7 @@ import psycopg2, psycopg2.extras, os, random
 import uuid
 import pprint
 
+userIsAdmin = False 
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
@@ -15,6 +16,7 @@ def connectToDB():
     return psycopg2.connect(connectionString)
   except:
     print("Can't connect to database")
+
 
 @app.route('/', methods=['GET', 'POST'])
 def mainIndex():
@@ -27,9 +29,11 @@ def mainIndex():
     except:
         session['username'] = ''
         
-    adminT = False
-    studentT = False    
-    userIsAdmin = False
+    global userIsAdmin
+    returnedUserInfo = ''
+
+    print("BEFORE POST")
+    print(session['admin']) 
 
      # if user typed in a post ...
     if request.method == 'POST':
@@ -43,17 +47,15 @@ def mainIndex():
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
             
             returnedUserInfo = cursor.fetchone()
-            
+
             #If a user-pwd combo was found and it matches then log the person in
             if returnedUserInfo:
               print("username and password match found...")
               SignedInButton = False
               session['username'] = username
               session['loggedIn']=True 
-              
-              #print("Attempting cursor fetch")
-              #returnedUserInfo = cursor.fetchone()
-              
+                        
+              print(returnedUserInfo)
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
                 userIsAdmin = True
@@ -65,7 +67,7 @@ def mainIndex():
               session['username']=''
               SignedInButton = True
               return render_template('login.html', failed = SignedInButton)
-              
+
           except:
             print("Error accesing from users table when logging in")
             print(cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw)))
@@ -75,9 +77,17 @@ def mainIndex():
         print("Nobody is currently logged in.") 
     else:
        session['loggedIn'] = True
-       print('User: ' + session['username'] + ' is logged in')
-    
+       print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
+
+    print("AFTER POST")
+    print(session['admin'] )
+
+
+    print("PRINT RETURNEDUSERINFO BEFORE COMMIT")
+
     connection.commit()
+
+    print("PRINT RETURNEDUSERINFO")
 
     return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
 
@@ -141,7 +151,7 @@ def login():
               print("Error accesing from users table when logging in whyyyy")
               #print(cursor.execute("select * from user_info WHERE userid = %s AND password = crypt(%s, password);" , (username, pw)))
 
-    print('Username: ' + session['username'])
+    print('Username: ' + session['username'] + ' in login function')
     
     #Go to home page
     return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
@@ -157,6 +167,18 @@ def logout():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     return render_template('contact.html')
+    
+@app.route('/announcement', methods=['GET','POST'])
+def announcements():
+    try:
+        print('User: ' + session['username'] + ' in announcement function')
+    except:
+        session['username'] = ''
+          
+    
+    userIsAdmin = True
+  
+    return render_template('announcements.html', adminView = userIsAdmin)
   
 # start the server
 if __name__ == '__main__':
