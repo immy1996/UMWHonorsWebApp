@@ -98,6 +98,8 @@ def login():
     cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
     #Try to print the user, if not logged in this will throw an error and we set username to an empty string
     
+    global userIsAdmin
+    returnedUserInfo = ''
     session['loggedIn'] = False
     
     try:
