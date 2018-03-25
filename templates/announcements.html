@@ -10,12 +10,17 @@
 }
 </style>
 
+{% if posted != True  %}
+
+
 <div class="col-sm-8 text-left" style="background-color: #fff">
     <h1>Enter an Announcement</h1>
     <hr>
-    <form id="contact-form" method="post" action="/announcement_posted">
+    <form id="contact-form" method="post" action="/announcement">
         <div class="col-xs-3">
             <input type="text" class="form-control" name="title" placeholder="Title" required/>
+            <br>
+            <input type="text" class="form-control" name="date" placeholder="Date" required/>
             <br>
             <textarea rows="4" name="announcement" type="textarea" class="form-control" placeholder="Text" required></textarea>
             <br>
@@ -23,5 +28,9 @@
         </div>
     </form>
 </div>
+{% else %}
+
+{% endif %}
+
 
 {% endblock %}

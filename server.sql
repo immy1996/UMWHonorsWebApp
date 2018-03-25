@@ -14,7 +14,8 @@ CREATE TABLE user_info
 CREATE TABLE announcements
 (
    postid serial NOT NULL PRIMARY KEY,
-   announcement varchar(500),
+   announcement_title varchar(100),
+   announcement_text varchar(500),
    post_date date
 );
 

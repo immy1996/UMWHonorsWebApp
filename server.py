@@ -177,11 +177,47 @@ def announcements():
         print('User: ' + session['username'] + ' in announcement function')
     except:
         session['username'] = ''
+        
+
+    #Connect to DB
+    connection = connectToDB()
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        print('User: ' + session['username'] + ' in announcement function')
+    except:
+        session['username'] = ''
+        
+
+    posted = False
+
+    if request.method == 'POST':
+        print("Inserting announcements")          
+        
+        try: 
+          print( cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, %s);", (request.form['title'], request.form['announcement'], request.form['date']) ))
+          query = cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, %s);", (request.form['title'], request.form['announcement'], request.form['date']) )
+          #Execute on the db
+          cursor.execute( query )
+        
+          posted = True
           
-    
+          print("SUCCESSFULLLLLY INSERRTETDDDDDDDDDDDD")
+
+          connection.commit()
+
+          return redirect(url_for('mainIndex'))
+          
+        except:
+            posted = False
+            print("Error inserting into announcements table!")
+            print("Tried: INSERT INTO users (username, password) VALUES (%s, %s);" , 
+                  (request.form['userName'], request.form['pw']) )
+            connection.rollback()
+          
     userIsAdmin = True
     session['loggedIn'] = True
     return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
+    
   
 # start the server
 if __name__ == '__main__':
