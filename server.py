@@ -168,7 +168,8 @@ def logout():
     
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
+    session['loggedIn'] = True
+    return render_template('contact.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
     
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
@@ -179,8 +180,8 @@ def announcements():
           
     
     userIsAdmin = True
-  
-    return render_template('announcements.html', adminView = userIsAdmin)
+    session['loggedIn'] = True
+    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
   
 # start the server
 if __name__ == '__main__':
