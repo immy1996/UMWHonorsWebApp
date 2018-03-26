@@ -269,9 +269,8 @@ def allAnnouncements():
     except:
       print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
 
-    userIsAdmin = True
-    session['loggedIn'] = True        
-    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, allAnnounceList = resultsAnnounce)
+    session['loggedIn'] = False
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'], allAnnounceList = resultsAnnounce)
 
 # start the server
 if __name__ == '__main__':
