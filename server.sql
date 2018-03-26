@@ -48,7 +48,7 @@ CREATE ROLE umwhonors WITH LOGIN;
 ALTER ROLE umwhonors WITH PASSWORD 'umw';
 
 GRANT ALL ON user_info, announcements, student_info TO umwhonors;
-
+GRANT USAGE, SELECT ON SEQUENCE announcements_postid_seq TO umwhonors;
 
 INSERT into user_info values ('Adam', 'password', 'y');
 INSERT into user_info values ('Jack', 'password', 'n');
