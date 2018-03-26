@@ -203,12 +203,6 @@ def contact():
     
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
-    try:
-        print('User: ' + session['username'] + ' in announcement function')
-    except:
-        session['username'] = ''
-        
-
     #Connect to DB
     connection = connectToDB()
     cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -245,7 +239,40 @@ def announcements():
     userIsAdmin = True
     session['loggedIn'] = True
     return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
-  
+    
+@app.route('/previousannouncements', methods=['GET','POST'])
+def allAnnouncements():
+    #Connect to DB
+    connection = connectToDB()
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        print('User: ' + session['username'] + ' in announcement function')
+    except:
+        session['username'] = ''
+        
+    allAnnounceList = []    
+    
+    try:    
+      mogallAnnounce = cursor.mogrify("select * from announcements;")
+      print("BEFORE MOGALLANNOUNCE")
+      print(mogallAnnounce)
+      cursor.execute(mogallAnnounce)
+      print("AFTER EXECUTE")
+      resultsAnnounce = cursor.fetchall()
+      print("AFTER FETCHALL")
+      print(resultsAnnounce)
+      #A = cursor.fetchone()
+      #print(A)
+      #allAnnounceList.append(A)
+      #print(allAnnounceList)
+      
+    except:
+      print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
+
+    userIsAdmin = True
+    session['loggedIn'] = True        
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, allAnnounceList = resultsAnnounce)
+
 # start the server
 if __name__ == '__main__':
      app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug=True)

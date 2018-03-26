@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>All Announcements in order</h1>
+
+{% for i in allAnnounceList %}
+<header class="jumbotron my-4">
+    <h1 class="display-3">Title: {{i[1]}}</h1>
+    <p class="lead">Body: {{i[2]}} </p>
+    <p class="lead">Date: {{i[3]}}</p>
+    <p class="lead">ID: {{i[0]}}</p>
+</header>
+</br>
+{% endfor %}
+
+{% endblock %}
