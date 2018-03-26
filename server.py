@@ -32,6 +32,8 @@ def mainIndex():
         
     global userIsAdmin
     returnedUserInfo = ''
+    announcementCount = 0
+    announceList = []
 
     print("BEFORE POST")
     #print(session['admin']) 
@@ -83,6 +85,33 @@ def mainIndex():
     print("AFTER POST")
     #print(session['admin'] )
 
+    #announcements
+    try:
+      mogAnnounce = cursor.mogrify("select * from announcements;")
+      print(mogAnnounce)
+      cursor.execute(mogAnnounce)
+      resultsAnnounce = cursor.fetchall()
+      print(resultsAnnounce)
+      print(len(resultsAnnounce))
+      announcementCount = len(resultsAnnounce)
+      print("ANNOUNCEMENTCOUNT")
+      print(announcementCount)
+      print(type(announcementCount))
+      
+      
+      print("BEFORE MOGRIFY")
+      announceInfo = cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, ))
+      print(announceInfo)
+      print("AFTER MOGRIFY")
+      cursor.execute(announceInfo)
+      A = cursor.fetchone()
+      announceList.append(A)
+      print(announceList)
+      print(type(announceList))
+      
+    except:
+      print(cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, )))
+
 
     print("PRINT RETURNEDUSERINFO BEFORE COMMIT")
 
@@ -90,7 +119,7 @@ def mainIndex():
 
     print("PRINT RETURNEDUSERINFO")
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, announceList = announceList)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
