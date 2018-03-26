@@ -189,7 +189,7 @@ def announcements():
         session['username'] = ''
         
 
-    posted = False
+    post = False
 
     if request.method == 'POST':
         print("Inserting announcements")          
@@ -201,25 +201,21 @@ def announcements():
           #Execute on the db
           cursor.execute( query )
         
-          posted = True
+          post = True
           
           print("SUCCESSFULLLLLY INSERRTETDDDDDDDDDDDD")
 
           connection.commit()
-
-          return redirect(url_for('mainIndex'))
           
         except:
-            posted = False
+            post = False
             print("Error inserting into announcements table!")
-            print("Tried: INSERT INTO users (username, password) VALUES (%s, %s);" , 
-                  (request.form['userName'], request.form['pw']) )
+            print("Tried: INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, now());", (request.form['title'], request.form['announcement']) )
             connection.rollback()
           
     userIsAdmin = True
     session['loggedIn'] = True
-    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
-    
+    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
   
 # start the server
 if __name__ == '__main__':
