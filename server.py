@@ -4,6 +4,7 @@ app = Flask(__name__)
 import psycopg2, psycopg2.extras, os, random
 import uuid
 import pprint
+import datetime
 
 userIsAdmin = False
 
@@ -194,8 +195,9 @@ def announcements():
         print("Inserting announcements")          
         
         try: 
-          print( cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, %s);", (request.form['title'], request.form['announcement'], request.form['date']) ))
-          query = cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, %s);", (request.form['title'], request.form['announcement'], request.form['date']) )
+          d = datetime.date.today()
+          print( cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, now());", (request.form['title'], request.form['announcement']) ))
+          query = cursor.mogrify("INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, now());", (request.form['title'], request.form['announcement']) )
           #Execute on the db
           cursor.execute( query )
         
