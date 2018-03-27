@@ -55,15 +55,8 @@
         <ul class="nav navbar-nav navbar-right main-nav">
           {% if loggedIn == True and adminView == True  %}
                 <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
-                <li><a class="nav-link" href="/announcement">Post Announcements</a></li>
                 <li>
                   <a class="nav-link" href="/">Home</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">About</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">Services</a>
                 </li>
                 <li>
                   <a class="nav-link" href="/contact">Contact</a>
@@ -79,12 +72,6 @@
                   <a class="nav-link" href="/">Home</a>
                 </li>
                 <li>
-                  <a class="nav-link" href="#">About</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">Services</a>
-                </li>
-                <li>
                   <a class="nav-link" href="/contact">Contact</a>
                 </li>
                 <li>
@@ -95,12 +82,6 @@
           {% elif loggedIn == False %}
           <li>
             <a class="nav-link" href="/">Home</a>
-          </li>
-          <li>
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li>
-            <a class="nav-link" href="#">Services</a>
           </li>
           <li>
             <a class="nav-link" href="/contact">Contact</a>
