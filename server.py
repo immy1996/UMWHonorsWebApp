@@ -199,7 +199,7 @@ def logout():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     session['loggedIn'] = False
-    return render_template('contact.html', loggedIn=session['loggedIn'])
+    return render_template('contact.html', loggedIn=session['loggedIn'] )
     
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
