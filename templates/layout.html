@@ -54,7 +54,14 @@
       <div id="navbarResponsive">
         <ul class="nav navbar-nav navbar-right main-nav">
           {% if loggedIn == True and adminView == True  %}
-                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}! </br> Role: Admin</font></a></li>
                 <li>
                   <a class="nav-link" href="/">Home</a>
                 </li>
@@ -67,7 +74,14 @@
                 </form>
                 </li>
           {% elif  loggedIn == True and adminView == False %}
-                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Student</font></a></li>
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}! </br> Role: Student</font></a></li>
                 <li>
                   <a class="nav-link" href="/">Home</a>
                 </li>
@@ -80,6 +94,13 @@
                 </form>
                 </li>
           {% elif loggedIn == False %}
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
           <li>
             <a class="nav-link" href="/">Home</a>
           </li>
