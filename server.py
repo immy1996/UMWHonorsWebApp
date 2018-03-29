@@ -6,8 +6,6 @@ import uuid
 import pprint
 import datetime
 
-userIsAdmin = False
-
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 
@@ -27,16 +25,16 @@ def mainIndex():
     cursor = connection.cursor()
     try:
         print('User: ' + session['username'])
+        print('Admin: ' + session['admin'])
     except:
         session['username'] = ''
+        session['admin']=False
         
-    global userIsAdmin
     returnedUserInfo = ''
     announcementCount = 0
     announceList = []
 
     print("BEFORE POST")
-    #print(session['admin']) 
 
      # if user typed in a post ...
     if request.method == 'POST':
@@ -61,13 +59,14 @@ def mainIndex():
               print(returnedUserInfo)
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
-                userIsAdmin = True
+                session['admin']=True
               else:
                 print("We are a student")
-                userIsAdmin = False
+                session['admin']=False
             else:
               session['loggedIn']=False
               session['username']=''
+              session['admin']=False
               SignedInButton = True
               return render_template('login.html', failed = SignedInButton)
 
@@ -77,13 +76,13 @@ def mainIndex():
     print('Username: ' + session['username'])
     if session['username'] == '':
         session['loggedIn'] = False
+        session['admin'] = False
         print("Nobody is currently logged in.") 
     else:
        session['loggedIn'] = True
        print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
 
     print("AFTER POST")
-    #print(session['admin'] )
 
     #announcements
     try:
@@ -119,7 +118,7 @@ def mainIndex():
 
     print("PRINT RETURNEDUSERINFO")
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, announceList = announceList)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['admin'], announceList = announceList)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -128,9 +127,9 @@ def login():
     cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
     #Try to print the user, if not logged in this will throw an error and we set username to an empty string
     
-    global userIsAdmin
     returnedUserInfo = ''
     session['loggedIn'] = False
+    session['admin']=False
     
     try:
         print('User: ' + session['username'])
@@ -164,18 +163,16 @@ def login():
               session['username'] = username
               session['loggedIn']=True 
               
-              #print("Attempting cursor fetch")
-              #returnedUserInfo = cursor.fetchone()
-              
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
-                userIsAdmin = True
+                session['admin']=True
               else:
                 print("We are a student")
-                userIsAdmin = False
+                session['admin']=False
             else:
               session['loggedIn']=False
               session['username']=''
+              session['admin']=False
               SignedInButton = True
               return render_template('login.html', failed = SignedInButton)
           except:
@@ -186,7 +183,7 @@ def login():
     print('Username: ' + session['username'] + ' in login function')
     
     #Go to home page
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = session['admin'])
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -236,9 +233,9 @@ def announcements():
             print("Tried: INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, now());", (request.form['title'], request.form['announcement']) )
             connection.rollback()
           
-    userIsAdmin = True
+    session['admin']=True
     session['loggedIn'] = True
-    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
+    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = session['admin'], posted = post)
     
 @app.route('/previousannouncements', methods=['GET','POST'])
 def allAnnouncements():
