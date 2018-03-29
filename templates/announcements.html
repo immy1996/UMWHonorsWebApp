@@ -12,6 +12,8 @@
 
 </br>
 
+{% if adminView == True %}
+
 {% if posted != True  %}
 
 <div class="col-sm-8 text-left" style="background-color: #fff">
@@ -30,6 +32,11 @@
 {% elif posted == True %}
 <p>Your announcement has been posted!</p>
 <a class="btn btn-primary" href="/" role="button">Return to Home</a>
+
+{% else %}
+
+{% endif %}
+
 
 {% endif %}
 

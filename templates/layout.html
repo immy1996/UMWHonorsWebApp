@@ -25,11 +25,6 @@
     .bg-dark {
       background-color: #002b5a!important;
     }
-
-    .modal-title {
-      margin-left: 45%;
-    }
-
     body {
       padding-right: 0px !important;
       margin-right: 0px !important;
@@ -41,6 +36,9 @@
     .nav li{
       display:inline-block;
     }
+.modal-title {
+    margin-left: 43%;
+}
   </style>
 
 </head>
@@ -54,16 +52,16 @@
       <div id="navbarResponsive">
         <ul class="nav navbar-nav navbar-right main-nav">
           {% if loggedIn == True and adminView == True  %}
-                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Admin</font></a></li>
-                <li><a class="nav-link" href="/announcement">Post Announcements</a></li>
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}! </br> Role: Admin</font></a></li>
                 <li>
                   <a class="nav-link" href="/">Home</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">About</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">Services</a>
                 </li>
                 <li>
                   <a class="nav-link" href="/contact">Contact</a>
@@ -74,15 +72,16 @@
                 </form>
                 </li>
           {% elif  loggedIn == True and adminView == False %}
-                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}} </br> Role: Student</font></a></li>
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+                <li style="right:0; position:absolute"><a><font color="white">Welcome, {{user}}! </br> Role: Student</font></a></li>
                 <li>
                   <a class="nav-link" href="/">Home</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">About</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="#">Services</a>
                 </li>
                 <li>
                   <a class="nav-link" href="/contact">Contact</a>
@@ -93,14 +92,15 @@
                 </form>
                 </li>
           {% elif loggedIn == False %}
+          <!--<li>-->
+          <!--  <a class="nav-link" href="/">-->
+          <!--    <p>Here is my adminView variable: {{ adminView }}</p>-->
+          <!--    </br>-->
+          <!--    <p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
+          <!--  </a>-->
+          <!--</li>-->
           <li>
             <a class="nav-link" href="/">Home</a>
-          </li>
-          <li>
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li>
-            <a class="nav-link" href="#">Services</a>
           </li>
           <li>
             <a class="nav-link" href="/contact">Contact</a>
