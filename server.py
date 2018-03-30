@@ -195,7 +195,7 @@ def logout():
     
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
+    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = session['admin'])
     
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
@@ -265,7 +265,7 @@ def allAnnouncements():
     except:
       print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
 
-    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce, adminView = userIsAdmin)
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce, adminView = session['admin'])
 
 # start the server
 if __name__ == '__main__':
