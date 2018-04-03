@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+{% for i in studentList %}
+
+<header class="jumbotron my-4">
+    <center><h1 class="display-3">{{i[1]}} {{i[0]}}'s Progress Report</h1></center>
+    <p class="lead">First Name: {{i[1]}}</p>
+    <p class="lead">Last Name: {{i[0]}} </p>
+    <p class="lead">ID: {{i[2]}}</p>
+    <p class="lead">Email: {{i[3]}}</p>
+    <p class="lead">Admitted Date: {{i[4]}}</p>
+    <p class="lead">Dupont Code: {{i[5]}}</p>
+    <p class="lead">Student Status: {{i[6]}}</p>
+    <p class="lead">Co Cur: {{i[7]}}</p>
+    <p class="lead">Date 1: {{i[8]}}</p>
+    <p class="lead">FSEM HN: {{i[9]}}</p>
+    <p class="lead">FSEM Date: {{i[10]}}</p>
+    <p class="lead">HN Course 1: {{i[11]}}</p>
+    <p class="lead">HN Course 1 Date: {{i[12]}}</p>
+    <p class="lead">HN Course 2: {{i[13]}}</p>
+    <p class="lead">HN Course 2 Date: {{i[14]}}</p>
+    <p class="lead">HN Course 3: {{i[15]}}</p>
+    <p class="lead">HN Course 3 Date: {{i[16]}}</p>
+    <p class="lead">HN Course 4: {{i[17]}}</p>
+    <p class="lead">HN Course 4 Date: {{i[18]}}</p>
+
+</header>
+</br>
+{% endfor %}
+
+
+
+
+{% endblock %}

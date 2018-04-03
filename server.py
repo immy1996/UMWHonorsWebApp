@@ -9,6 +9,9 @@ import datetime
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 
+userIsAdmin = False
+failedSresult = False
+
 def connectToDB():
   connectionString = 'dbname=honors_program user=umwhonors password=umw host=localhost'
   try:
@@ -25,11 +28,10 @@ def mainIndex():
     cursor = connection.cursor()
     try:
         print('User: ' + session['username'])
-        print('Admin: ' + session['admin'])
     except:
         session['username'] = ''
-        session['admin']=False
-        
+
+    global userIsAdmin
     returnedUserInfo = ''
     announcementCount = 0
     announceList = []
@@ -59,14 +61,13 @@ def mainIndex():
               print(returnedUserInfo)
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
-                session['admin']=True
+                userIsAdmin=True
               else:
                 print("We are a student")
-                session['admin']=False
+                userIsAdmin=False
             else:
               session['loggedIn']=False
               session['username']=''
-              session['admin']=False
               SignedInButton = True
               return render_template('login.html', failed = SignedInButton)
 
@@ -76,7 +77,6 @@ def mainIndex():
     print('Username: ' + session['username'])
     if session['username'] == '':
         session['loggedIn'] = False
-        session['admin'] = False
         print("Nobody is currently logged in.") 
     else:
        session['loggedIn'] = True
@@ -107,7 +107,10 @@ def mainIndex():
       announceList.append(A)
       print(announceList)
       print(type(announceList))
-      
+      announceList.reverse(A)
+      print("REVERSE")
+      print(announceList)
+
     except:
       print(cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, )))
 
@@ -118,73 +121,7 @@ def mainIndex():
 
     print("PRINT RETURNEDUSERINFO")
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['admin'], announceList = announceList)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    #Connect to DB
-    connection = connectToDB()
-    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    #Try to print the user, if not logged in this will throw an error and we set username to an empty string
-    
-    returnedUserInfo = ''
-    session['loggedIn'] = False
-    session['admin']=False
-    
-    try:
-        print('User: ' + session['username'])
-    except:
-        session['username'] = ''
-        
-    # if user tried to log in ...
-    if request.method == 'POST':
-          #Get username
-          username = request.form['userName']
-          print('incoming username ' + username)
-          
-          #Get password
-          pw = request.form['pw']
-          session['SignedInButton'] = False
-          SignedInButton = session['SignedInButton']
-          #Try and find the user and password combo in the table
-          try: 
-            #Print the query running
-            print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
-
-            #Execute on the db
-            cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
-            
-            returnedUserInfo = cursor.fetchone()
-            
-            #If a user-pwd combo was found and it matches then log the person in
-            if returnedUserInfo:
-              print("username and password match found...")
-              SignedInButton = False
-              session['username'] = username
-              session['loggedIn']=True 
-              
-              if returnedUserInfo[2] == 'y':
-                print("We are an admin")
-                session['admin']=True
-              else:
-                print("We are a student")
-                session['admin']=False
-            else:
-              session['loggedIn']=False
-              session['username']=''
-              session['admin']=False
-              SignedInButton = True
-              return render_template('login.html', failed = SignedInButton)
-          except:
-              print("after return statement")
-              print("Error accesing from users table when logging in whyyyy")
-              #print(cursor.execute("select * from user_info WHERE userid = %s AND password = crypt(%s, password);" , (username, pw)))
-
-    print('Username: ' + session['username'] + ' in login function')
-    
-    #Go to home page
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView = session['admin'])
-
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -195,7 +132,7 @@ def logout():
     
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = session['admin'])
+    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
     
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
@@ -232,9 +169,8 @@ def announcements():
             print("Tried: INSERT into announcements (announcement_title, announcement_text, post_date) VALUES (%s, %s, now());", (request.form['title'], request.form['announcement']) )
             connection.rollback()
           
-    session['admin']=True
     session['loggedIn'] = True
-    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = session['admin'], posted = post)
+    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
     
 @app.route('/previousannouncements', methods=['GET','POST'])
 def allAnnouncements():
@@ -265,7 +201,47 @@ def allAnnouncements():
     except:
       print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
 
-    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce, adminView = session['admin'])
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce, adminView = userIsAdmin)
+
+@app.route('/studentresult', methods=['GET','POST'])
+def searchstudent():
+    print("IN STUDENT RESULT")
+  
+    #Connect to DB
+    connection = connectToDB()
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        print('User: ' + session['username'] + ' in announcement function')
+    except:
+        session['username'] = ''
+        
+    global failedSresult    
+    studentList = []  
+
+    try:    
+      mogstudentResult = cursor.mogrify("select * from student_info where lastname = %s and firstname = %s;", (request.form['lname'], request.form['fname']) )
+      print("BEFORE MOGALLANNOUNCE")
+      print(mogstudentResult)
+      cursor.execute(mogstudentResult)
+      print("AFTER EXECUTE")
+      studentList = cursor.fetchall()
+      print("AFTER FETCHALL")
+      print("PRINTING STUDENTLIST NOW")
+      print(studentList)
+      failedSresult = False
+      
+      if studentList == []:
+        failedSresult = True
+        return redirect(url_for('mainIndex'))
+        
+      print("PRINTING FAILEDSRESULT STATUS")
+      print(failedSresult)
+
+    except:
+      print("ERROR! Tried " + cursor.mogrify("select * from student_info where lastname = %s and firstname = %s;", (request.form['lname'], request.form['fname']) ) )    
+  
+  
+    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
 
 # start the server
 if __name__ == '__main__':

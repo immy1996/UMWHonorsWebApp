@@ -148,7 +148,7 @@
    {% endif %}
 
   <!--search modal-->
-
+   
   <div id="searchModal" class="modal fade" style="">
     <div class="modal-dialog" style="position: relative;  top: 137px;width:1000px;height:350px;">
       <div class="modal-content">
@@ -157,12 +157,12 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <form method="post" class="form col-md-12 center-block" action="/">
+          <form method="post" class="form col-md-12 center-block" action="/studentresult">
             <div class="form-group">
-              <input type="text" class="form-control input-lg" name="fname" placeholder="First name">
+              <input type="text" class="form-control input-lg" name="fname" placeholder="First name" required>
             </div>
             <div class="form-group">
-              <input type="password" class="form-control input-lg" name="lname" placeholder="Last name">
+              <input type="text" class="form-control input-lg" name="lname" placeholder="Last name" required>
             </div>
             <div class="form-group">
               <button class="btn btn-primary btn-lg btn-block">Search</button>
@@ -171,6 +171,9 @@
         </div>
         <div class="modal-footer">
           <form>
+            {% if failedSresult == True %}
+            <h3 style="color:#ff3333;"><center><marquee style="height:1;width:200" scrollamount="200" scrolldelay="500">Not found in Database!</marquee></center></h3>
+            {% endif %}
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
            </form>
         </div>
@@ -180,7 +183,7 @@
     <!-- /.modal-dialog -->
   </div>
   <!-- /.modal -->
-
+  
   <!-- upload modal -->
    <div id="uploadModal" class="modal fade" style="">
       <div class="modal-dialog" style="position: relative;  top: 137px;width:1000px;height:350px;">
