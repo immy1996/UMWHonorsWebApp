@@ -5,6 +5,7 @@ import psycopg2, psycopg2.extras, os, random
 import uuid
 import pprint
 import datetime
+import os
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
@@ -242,6 +243,37 @@ def searchstudent():
   
   
     return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
+
+@app.route('/upload', methods=['POST'])
+def upload():
+   print("IN UPLOAD")
+
+   #Connect to DB
+   connection = connectToDB()
+   cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+   try:
+      print('User: ' + session['username'] + ' in upload function')
+   except:
+      session['username'] = ''
+        
+   try:
+      uploadfile = request.files['csvfile']
+      uploadfile.save(os.path.join(app.root_path, 'static/csvfiles/data.csv'))
+      copy_sql = """
+                 COPY student_info FROM stdin WITH CSV HEADER
+                 DELIMITER as ','
+                 """
+      with open(os.path.join(app.root_path, 'static/csvfiles/data.csv'), 'r') as f:
+         print("file opened")
+         cursor.copy_expert(sql=copy_sql, file=f)
+         connection.commit()
+         cursor.close()
+      print("done inserting?")
+   except:
+      print("ERROR! Tried ")    
+  
+  
+   return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'])
 
 # start the server
 if __name__ == '__main__':
