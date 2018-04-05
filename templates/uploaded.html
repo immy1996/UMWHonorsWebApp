@@ -10,8 +10,27 @@
 }
 </style>
 
+
+
+{% if adminView == True %}
+
+{% if uploadFailed != True  %}
+
 <br>
-<p>Your CSV has been posted!</p>
+<p>Your CSV has been uploaded!</p>
 <a class="btn btn-primary" href="/" role="button">Return to Home</a>
+
+{% elif uploadFailed == True %}
+
+<br>
+<p>There was an error uploading your CSV file. Please try again later.</p>
+<a class="btn btn-primary" href="/" role="button">Return to Home</a>
+
+{% else %}
+
+{% endif %}
+
+
+{% endif %}
 
 {% endblock %}

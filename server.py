@@ -248,6 +248,8 @@ def searchstudent():
 def upload():
    print("IN UPLOAD")
 
+   uploadFailed = False
+
    #Connect to DB
    connection = connectToDB()
    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -270,10 +272,11 @@ def upload():
          cursor.close()
       print("done inserting?")
    except:
-      print("ERROR! Tried ")    
+      print("ERROR! Tried ")
+      uploadFailed = True 
   
   
-   return render_template('uploaded.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
+   return render_template('uploaded.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin, uploadFailed = uploadFailed)
 
 # start the server
 if __name__ == '__main__':
