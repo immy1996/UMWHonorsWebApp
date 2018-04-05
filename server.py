@@ -273,7 +273,7 @@ def upload():
       print("ERROR! Tried ")    
   
   
-   return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'])
+   return render_template('uploaded.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
 
 # start the server
 if __name__ == '__main__':
