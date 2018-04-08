@@ -4,6 +4,9 @@ CREATE DATABASE honors_program;
 
 \c honors_program;
 
+-- add extension
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE user_info
 (
    userid varchar(25) NOT NULL PRIMARY KEY,

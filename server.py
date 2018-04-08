@@ -47,7 +47,8 @@ def mainIndex():
           session['SignedInButton'] = False
           SignedInButton = session['SignedInButton']
           try: 
-            print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
+            #select user_info.userid, user_info.password, user_info.isadmin, student_info.email, student_info.dupont_code from user_info cross join student_info;
+            #print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
             cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
             
             returnedUserInfo = cursor.fetchone()
@@ -108,9 +109,6 @@ def mainIndex():
       announceList.append(A)
       print(announceList)
       print(type(announceList))
-      announceList.reverse(A)
-      print("REVERSE")
-      print(announceList)
 
     except:
       print(cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, )))
@@ -198,11 +196,13 @@ def allAnnouncements():
       #print(A)
       #allAnnounceList.append(A)
       #print(allAnnounceList)
+      print("ATTEMPTING TO REVERSE THE LIST")
+      print(resultsAnnounce[::-1])
       
     except:
       print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
 
-    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce, adminView = userIsAdmin)
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce[::-1], adminView = userIsAdmin)
 
 @app.route('/studentresult', methods=['GET','POST'])
 def searchstudent():
