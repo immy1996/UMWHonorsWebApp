@@ -34,6 +34,7 @@ def mainIndex():
         session['username'] = ''
 
     global userIsAdmin
+    global failedSresult
     global SignedInButton
     returnedUserInfo = ''
     announcementCount = 0
@@ -64,6 +65,7 @@ def mainIndex():
               if returnedUserInfo[2] == 'y':
                 print("We are an admin")
                 userIsAdmin=True
+                failedSresult=False
               else:
                 print("We are a student")
                 userIsAdmin=False
