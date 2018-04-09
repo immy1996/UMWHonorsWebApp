@@ -36,9 +36,25 @@
     .nav li{
       display:inline-block;
     }
-.modal-title {
-    margin-left: 43%;
-}
+    .modal-title {
+      margin-left: 43%;
+    }
+    .marquee{
+      margin: 0 auto;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .marquee span{
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 35s linear infinite;
+    }
+    @keyframes marquee{
+      0% {transorm: translate(0,0); }
+      100% {transofrm: translate(-100%, 0);}
+    }
   </style>
 
 </head>
@@ -152,10 +168,10 @@
         <div class="modal-body">
           <form method="post" class="form col-md-12 center-block" action="/">
             <div class="form-group">
-              <input type="text" class="form-control input-lg" name="userName" placeholder="Username">
+              <input type="text" class="form-control input-lg" name="userName" placeholder="Username" required>
             </div>
             <div class="form-group">
-              <input type="password" class="form-control input-lg" name="pw" placeholder="Password">
+              <input type="password" class="form-control input-lg" name="pw" placeholder="Password" required>
             </div>
             <div class="form-group">
               <button class="btn btn-primary btn-lg btn-block">Sign In</button>
@@ -163,11 +179,12 @@
           </form>
         </div>
         <div class="modal-footer">
-          <form action="/">
-            {% if failed %}
+          <form>
+            {% if failed == True %}
                 <h3 style="color:#ff3333;"><center><marquee style="height:1;width:200" scrollamount="200" scrolldelay="500">Invalid username or password!</marquee></center></h3>
             {% endif %}
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </form>
         </div>
       </div>
       <!-- /.modal-content -->

@@ -12,6 +12,7 @@ app.config['SECRET_KEY'] = 'secret!'
 
 userIsAdmin = False
 failedSresult = False
+SignedInButton = False
 
 def connectToDB():
   connectionString = 'dbname=honors_program user=umwhonors password=umw host=localhost'
@@ -33,6 +34,7 @@ def mainIndex():
         session['username'] = ''
 
     global userIsAdmin
+    global SignedInButton
     returnedUserInfo = ''
     announcementCount = 0
     announceList = []
@@ -44,8 +46,6 @@ def mainIndex():
           username = request.form['userName']
           print('incoming username ' + username)
           pw = request.form['pw']
-          session['SignedInButton'] = False
-          SignedInButton = session['SignedInButton']
           try: 
             #select user_info.userid, user_info.password, user_info.isadmin, student_info.email, student_info.dupont_code from user_info cross join student_info;
             #print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
@@ -71,7 +71,10 @@ def mainIndex():
               session['loggedIn']=False
               session['username']=''
               SignedInButton = True
-              return render_template('login.html', failed = SignedInButton)
+              print("SignedInButton STATUS*********")
+              print(SignedInButton)
+              return redirect(url_for('mainIndex'))
+
 
           except:
             print("Error accesing from users table when logging in")
@@ -120,7 +123,7 @@ def mainIndex():
 
     print("PRINT RETURNEDUSERINFO")
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
