@@ -75,7 +75,6 @@ def mainIndex():
 
           except:
             print("Error accesing from users table when logging in")
-            print(cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw)))
     print('Username: ' + session['username'])
     if session['username'] == '':
         session['loggedIn'] = False
@@ -310,8 +309,7 @@ def upload():
       uploadfile = request.files['csvfile']
       uploadfile.save(os.path.join(app.root_path, 'static/csvfiles/data.csv'))
       
-      cursor.execute("DELETE FROM student_info;")
-      
+      cursor.execute("delete from student_info;")
       copy_sql = """
                  COPY student_info FROM stdin WITH CSV HEADER
                  DELIMITER as ','
@@ -320,7 +318,10 @@ def upload():
          print("file opened")
          cursor.copy_expert(sql=copy_sql, file=f)
          connection.commit()
-         cursor.close()
+      
+      cursor.execute("update student_info set dupont_code = crypt('dupont_code', gen_salt('md5'));")
+      connection.commit()
+      cursor.close()
       print("done inserting?")
    except:
       print("ERROR! Tried ")
