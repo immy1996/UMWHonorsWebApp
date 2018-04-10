@@ -244,6 +244,54 @@ def searchstudent():
   
     return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
 
+@app.route('/mychecksheet', methods=['GET','POST'])
+def searchownchecksheet():
+    print("IN MY CHECKSHEET RESULT RESULT")
+  
+    #Connect to DB
+    connection = connectToDB()
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        print('User: ' + session['username'] + ' in announcement function')
+        ourName = session['username']
+        print('ourName: ' + ourName)
+        
+    except:
+        session['username'] = ''
+        
+    print("Before Def failedSResult")
+    global failedSresult    
+    studentList = []  
+
+    try:    
+      print("Before SELECT statement")
+      
+      mogstudentResult = cursor.mogrify("select * from student_info where email = %s;", (ourName, ) )
+      
+      print("BEFORE MOGALLANNOUNCE")
+      print(mogstudentResult)
+      cursor.execute(mogstudentResult)
+      print("AFTER EXECUTE")
+      studentList = cursor.fetchall()
+      print("AFTER FETCHALL")
+      print("PRINTING STUDENTLIST NOW")
+      print(studentList)
+      failedSresult = False
+      
+      if studentList == []:
+        failedSresult = True
+        return redirect(url_for('mainIndex'))
+        
+      print("PRINTING FAILEDSRESULT STATUS")
+      print(failedSresult)
+
+    except:
+      print("ERROR! Tried " + cursor.mogrify("select * from student_info where email = %s;", (request.form['lname'], request.form['fname']) ) )    
+  
+  
+    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
    print("IN UPLOAD")
@@ -261,6 +309,9 @@ def upload():
    try:
       uploadfile = request.files['csvfile']
       uploadfile.save(os.path.join(app.root_path, 'static/csvfiles/data.csv'))
+      
+      cursor.execute("DELETE FROM student_info;")
+      
       copy_sql = """
                  COPY student_info FROM stdin WITH CSV HEADER
                  DELIMITER as ','
