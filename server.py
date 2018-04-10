@@ -1,6 +1,4 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import psycopg2, psycopg2.extras, os
 app = Flask(__name__)
 import psycopg2, psycopg2.extras, os, random
@@ -11,13 +9,6 @@ import os
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
-
-engine = create_engine('postgresql://umwhonors:umw@localhost:5432/honors_program')
-
-Session = sessionmaker(bind=engine)
-
-# create a Session
-session = Session()
 
 userIsAdmin = False
 failedSresult = False
