@@ -29,7 +29,7 @@ CREATE TABLE student_info
    id integer,
    email varchar(75),
    admitted_date varchar(45),
-   dupont_code integer,
+   dupont_code varchar(45),
    student_status varchar(45),
    comments varchar(45),
    term varchar(45),

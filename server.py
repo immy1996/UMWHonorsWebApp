@@ -49,18 +49,18 @@ def mainIndex():
           pw = request.form['pw']
           try: 
             
-            cursor.execute("SELECT student_info.email, user_info.isadmin FROM student_info LEFT OUTER JOIN user_info ON (student_info.email = userid) WHERE student_info.email = %s AND (student_info.dupont_code = %s OR user_info.password = %s);", (username, pw, pw))
+            cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = %s) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
             
             returnedUserInfo = cursor.fetchone()
 
             #If a user-pwd combo was found and it matches then log the person in
             if returnedUserInfo:
-              print("username and password match found...")
+              print("user credentials found...")
               SignedInButton = False
               session['username'] = username
               session['loggedIn']=True 
               
-              if returnedUserInfo[1] == 'y':
+              if returnedUserInfo[2] == 'y':
                 userIsAdmin=True
               else:
                 userIsAdmin=False
