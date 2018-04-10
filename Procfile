@@ -1,1 +1,1 @@
-web: gunicorn honorprogram.wsgi:app
+web: gunicorn wsgi:app
