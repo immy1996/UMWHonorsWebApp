@@ -48,9 +48,8 @@ def mainIndex():
           print('incoming username ' + username)
           pw = request.form['pw']
           try: 
-            #select user_info.userid, user_info.password, user_info.isadmin, student_info.email, student_info.dupont_code from user_info cross join student_info;
-            #print(cursor.mogrify("select * from user_info WHERE userid = %s AND password = %s;", (username, pw)))
-            cursor.execute("select * from user_info WHERE userid = %s AND password = %s;" , (username, pw))
+            
+            cursor.execute("SELECT student_info.email, user_info.isadmin FROM student_info LEFT OUTER JOIN user_info ON (student_info.email = userid) WHERE student_info.email = %s AND (student_info.dupont_code = %s OR user_info.password = %s);", (username, pw, pw))
             
             returnedUserInfo = cursor.fetchone()
 
@@ -60,23 +59,19 @@ def mainIndex():
               SignedInButton = False
               session['username'] = username
               session['loggedIn']=True 
-                        
-              print(returnedUserInfo)
-              if returnedUserInfo[2] == 'y':
-                print("We are an admin")
+              
+              if returnedUserInfo[1] == 'y':
                 userIsAdmin=True
-                failedSresult=False
               else:
-                print("We are a student")
                 userIsAdmin=False
             else:
-              session['loggedIn']=False
-              session['username']=''
-              SignedInButton = True
-              print("SignedInButton STATUS*********")
-              print(SignedInButton)
-              return redirect(url_for('mainIndex'))
-
+                session['loggedIn']=False
+                session['username']=''
+                SignedInButton = True
+                userIsAdmin=False
+                print("SignedInButton STATUS*********")
+                print(SignedInButton)
+                return redirect(url_for('mainIndex'))
 
           except:
             print("Error accesing from users table when logging in")
