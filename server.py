@@ -49,7 +49,7 @@ def mainIndex():
           pw = request.form['pw']
           try: 
             
-            cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = %s) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
+            cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
             
             returnedUserInfo = cursor.fetchone()
 
@@ -319,7 +319,7 @@ def upload():
          cursor.copy_expert(sql=copy_sql, file=f)
          connection.commit()
       
-      cursor.execute("update student_info set dupont_code = crypt('dupont_code', gen_salt('md5'));")
+      cursor.execute("update student_info set dupont_code = crypt(dupont_code, gen_salt('md5'));")
       connection.commit()
       cursor.close()
       print("done inserting?")
