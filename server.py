@@ -15,10 +15,11 @@ failedSresult = False
 SignedInButton = False
 
 def connectToDB():
-  try:
-    return psycopg2.connect(os.environ['DATABASE_URL'])
-  except:
-    print("Can't connect to database")
+   connectionString = 'dbname=honors_program user=umwhonors password=umw host=localhost'
+   try:
+      return psycopg2.connect(connectionString)
+   except:
+      print("Can't connect to database")
 
 
 @app.route('/', methods=['GET', 'POST'])
