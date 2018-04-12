@@ -71,7 +71,7 @@ def mainIndex():
                 userIsAdmin=False
                 print("SignedInButton STATUS*********")
                 print(SignedInButton)
-                return redirect(url_for('mainIndex'))
+                return redirect(url_for('errorLogin'))
 
           except:
             print("Error accesing from users table when logging in")
@@ -120,6 +120,78 @@ def mainIndex():
     print("PRINT RETURNEDUSERINFO")
 
     return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
+
+@app.route('/loginerror', methods=['GET', 'POST'])
+def errorLogin():
+    #connecting to database
+    connection = connectToDB()
+    #cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor = connection.cursor()
+    try:
+        print('User: ' + session['username'])
+    except:
+        session['username'] = ''
+
+    global userIsAdmin
+    global failedSresult
+    global SignedInButton
+    returnedUserInfo = ''
+    announcementCount = 0
+    announceList = []
+
+    print("***********SIGNEDINBUTTON STATUS***********")
+    print(SignedInButton)
+
+    print("BEFORE POST")
+
+     # if user typed in a post ...
+    if request.method == 'POST':
+          username = request.form['userName']
+          print('incoming username ' + username)
+          pw = request.form['pw']
+          try: 
+            
+            cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
+            
+            returnedUserInfo = cursor.fetchone()
+
+            #If a user-pwd combo was found and it matches then log the person in
+            if returnedUserInfo:
+              print("user credentials found...")
+              SignedInButton = False
+              session['username'] = username
+              session['loggedIn']=True 
+              print(returnedUserInfo)
+              
+              if returnedUserInfo[2] == 'y':
+                userIsAdmin=True
+              else:
+                userIsAdmin=False
+                
+            else:
+                session['loggedIn']=False
+                session['username']=''
+                SignedInButton = True
+                userIsAdmin=False
+                print("SignedInButton STATUS*********")
+                print(SignedInButton)
+                return redirect(url_for('errrorLogin'))
+
+          except:
+            print("Error accesing from users table when logging in")
+    print('Username: ' + session['username'])
+    if session['username'] == '':
+        session['loggedIn'] = False
+        print("Nobody is currently logged in.") 
+    else:
+       session['loggedIn'] = True
+       print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
+
+    print("AFTER POST")
+
+    return render_template('login.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, failed = SignedInButton)
+
+
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
