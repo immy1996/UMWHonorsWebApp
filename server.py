@@ -15,9 +15,8 @@ failedSresult = False
 SignedInButton = False
 
 def connectToDB():
-  connectionString = 'dbname=honors_program user=umwhonors password=umw host=localhost'
   try:
-    return psycopg2.connect(connectionString)
+    return psycopg2.connect(os.environ['DATABASE_URL'])
   except:
     print("Can't connect to database")
 
