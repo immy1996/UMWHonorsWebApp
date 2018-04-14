@@ -38,11 +38,11 @@ sudo apt-get install python-setuptools
 sudo apt-get install postgresql 
 sudo apt-get install python-psycopg2
 
-### For PostgreSQL
-## first time logging in
+## For PostgreSQL
+### First time logging in PostgreSQL
 sudo sudo -u postgres psql
 
-## setting password in postgres
+### Setting password in postgres
 \password (The password you want it to be)
 
 <b>Created by Imran Ahmed, Shane McSally, and Luke Payne</b>
