@@ -70,8 +70,7 @@ def mainIndex():
                 session['username']=''
                 SignedInButton = True
                 userIsAdmin=False
-                print("SignedInButton STATUS*********")
-                print(SignedInButton)
+                print("*********LOGIN IS UNSUCCESSFULL*********")
                 return redirect(url_for('errorLogin'))
 
           except:
@@ -86,6 +85,7 @@ def mainIndex():
 
     print("AFTER POST")
 
+    print("VIEWING LATEST ANNOUNCEMENT")
     #announcements
     try:
       mogAnnounce = cursor.mogrify("select * from announcements;")
@@ -114,14 +114,11 @@ def mainIndex():
       print(cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, )))
 
 
-    print("PRINT RETURNEDUSERINFO BEFORE COMMIT")
-
     connection.commit()
-
-    print("PRINT RETURNEDUSERINFO")
 
     return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
 
+#Login error page
 @app.route('/loginerror', methods=['GET', 'POST'])
 def errorLogin():
     #connecting to database
@@ -134,11 +131,8 @@ def errorLogin():
         session['username'] = ''
 
     global userIsAdmin
-    global failedSresult
     global SignedInButton
     returnedUserInfo = ''
-    announcementCount = 0
-    announceList = []
 
     print("***********SIGNEDINBUTTON STATUS***********")
     print(SignedInButton)
@@ -192,8 +186,7 @@ def errorLogin():
 
     return render_template('login.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, failed = SignedInButton)
 
-
-
+#Logging out
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     #Username is nothing and loggedIn is false
@@ -201,10 +194,12 @@ def logout():
     session['loggedIn'] = False
     return redirect(url_for('mainIndex'))
     
+#Contact page    
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
     
+#Posting announcements
 @app.route('/announcement', methods=['GET','POST'])
 def announcements():
     #Connect to DB
@@ -215,7 +210,6 @@ def announcements():
     except:
         session['username'] = ''
         
-
     post = False
 
     if request.method == 'POST':
@@ -230,7 +224,7 @@ def announcements():
         
           post = True
           
-          print("SUCCESSFULLLLLY INSERRTETDDDDDDDDDDDD")
+          print("SUCCESSFULLLLLY INSERRTETED!!!!!!!!!!!!!!")
 
           connection.commit()
           
@@ -243,6 +237,7 @@ def announcements():
     session['loggedIn'] = True
     return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
     
+#Viewing all announcements    
 @app.route('/previousannouncements', methods=['GET','POST'])
 def allAnnouncements():
     #Connect to DB
@@ -276,6 +271,7 @@ def allAnnouncements():
 
     return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce[::-1], adminView = userIsAdmin)
 
+#Admin viewing a particular student's progress report
 @app.route('/studentresult', methods=['GET','POST'])
 def searchstudent():
     print("IN STUDENT RESULT")
@@ -316,6 +312,7 @@ def searchstudent():
   
     return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
 
+#Student viewing their own progress report
 @app.route('/mychecksheet', methods=['GET','POST'])
 def searchownchecksheet():
     print("IN MY CHECKSHEET RESULT RESULT")
@@ -364,6 +361,7 @@ def searchownchecksheet():
     return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
 
 
+#Uploading CSV file
 @app.route('/upload', methods=['POST'])
 def upload():
    print("IN UPLOAD")
