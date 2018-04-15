@@ -30,16 +30,17 @@ for them.
 
 ### Start with
 sudo apt-get update
-</br>
+<br />
+<br />
 sudo apt-get upgrade
 
 ### Packages
 sudo easy_install flask markdown
-</br>
+<br />
 sudo apt-get install python-setuptools 
-</br>
+<br />
 sudo apt-get install postgresql 
-</br>
+<br />
 sudo apt-get install python-psycopg2
 
 ## For PostgreSQL
