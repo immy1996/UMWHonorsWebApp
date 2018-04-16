@@ -16,11 +16,6 @@ footer {
 }
 </style>
 
-<!--<p>Here is my adminView variable: {{ adminView }}</p>-->
-<!--</br>-->
-<!--<p>Here is my loggedIn variable: {{ loggedIn }}</p>-->
-
-
    <!--login modal-->
  <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true" style="display: block;">
     <div class="modal-dialog" style="position: relative;  top: 137px;width:1000px;height:350px;">
@@ -42,10 +37,7 @@ footer {
           </form>
         </div>
         <div class="modal-footer">
-          <form action="/">
-            {% if failed %}
                 <h3 style="color:#ff3333;"><center><marquee style="height:1;width:200" scrollamount="200" scrolldelay="500">Invalid username or password!</marquee></center></h3>
-            {% endif %}
         </div>
       </div>
       <!-- /.modal-content -->
@@ -53,4 +45,5 @@ footer {
     <!-- /.modal-dialog -->
   </div>
   <!-- /.modal -->
+  
 {% endblock %}
