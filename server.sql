@@ -26,7 +26,7 @@ CREATE TABLE student_info
 (
    lastname varchar(45),
    firstname varchar(45),
-   id integer,
+   id varchar(45),
    email varchar(75),
    admitted_date varchar(45),
    dupont_code varchar(45),

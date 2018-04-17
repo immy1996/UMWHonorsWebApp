@@ -10,7 +10,6 @@ import os
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 
-userIsAdmin = False
 failedSresult = False
 SignedInButton = False
 
@@ -34,13 +33,12 @@ def mainIndex():
     except:
         session['username'] = ''
 
-    global userIsAdmin
     global failedSresult
     global SignedInButton
     returnedUserInfo = ''
     announcementCount = 0
     announceList = []
-
+        
     print("BEFORE POST")
 
      # if user typed in a post ...
@@ -62,14 +60,17 @@ def mainIndex():
               session['loggedIn']=True 
               
               if returnedUserInfo[2] == 'y':
-                userIsAdmin=True
+                session['userIsAdmin']=True
+                session['userIsStudent']=False
               else:
-                userIsAdmin=False
+                session['userIsAdmin']=False
+                session['userIsStudent']=True
             else:
                 session['loggedIn']=False
                 session['username']=''
                 SignedInButton = True
-                userIsAdmin=False
+                session['userIsAdmin']=False
+                session['userIsStudent']=False
                 print("*********LOGIN IS UNSUCCESSFULL*********")
                 return redirect(url_for('errorLogin'))
 
@@ -116,7 +117,7 @@ def mainIndex():
 
     connection.commit()
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
+    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['userIsAdmin'], studentView=session['userIsStudent'], announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
 
 #Login error page
 @app.route('/loginerror', methods=['GET', 'POST'])
@@ -130,7 +131,6 @@ def errorLogin():
     except:
         session['username'] = ''
 
-    global userIsAdmin
     global SignedInButton
     returnedUserInfo = ''
 
@@ -159,15 +159,18 @@ def errorLogin():
               print(returnedUserInfo)
               
               if returnedUserInfo[2] == 'y':
-                userIsAdmin=True
+                session['userIsAdmin']=True
+                session['userIsStudent']=False
               else:
-                userIsAdmin=False
+                session['userIsAdmin']=False
+                session['userIsStudent']=True
                 
             else:
                 session['loggedIn']=False
                 session['username']=''
                 SignedInButton = True
-                userIsAdmin=False
+                session['userIsAdmin']=False
+                session['userIsStudent']=False
                 print("SignedInButton STATUS*********")
                 print(SignedInButton)
                 return redirect(url_for('errrorLogin'))
@@ -184,7 +187,7 @@ def errorLogin():
 
     print("AFTER POST")
 
-    return render_template('login.html', loggedIn=session['loggedIn'], user=session['username'], adminView=userIsAdmin, failed = SignedInButton)
+    return render_template('login.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['userIsAdmin'], studentView=session['userIsStudent'], failed = SignedInButton)
 
 #Logging out
 @app.route('/logout', methods=['GET', 'POST'])
@@ -197,7 +200,7 @@ def logout():
 #Contact page    
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin)
+    return render_template('contact.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = session['userIsAdmin'], studentView=session['userIsStudent'])
     
 #Posting announcements
 @app.route('/announcement', methods=['GET','POST'])
@@ -235,7 +238,7 @@ def announcements():
             connection.rollback()
           
     session['loggedIn'] = True
-    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = userIsAdmin, posted = post)
+    return render_template('announcements.html', loggedIn=session['loggedIn'], user=session['username'], adminView = session['userIsAdmin'], studentView=session['userIsStudent'], posted = post)
     
 #Viewing all announcements    
 @app.route('/previousannouncements', methods=['GET','POST'])
@@ -269,7 +272,7 @@ def allAnnouncements():
     except:
       print("ERROR! Tried " + cursor.mogrify("select * from announcements;") )
 
-    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce[::-1], adminView = userIsAdmin)
+    return render_template('allAnnouncements.html', loggedIn=session['loggedIn'],  user=session['username'], allAnnounceList = resultsAnnounce[::-1], adminView = session['userIsAdmin'], studentView=session['userIsStudent'])
 
 #Admin viewing a particular student's progress report
 @app.route('/studentresult', methods=['GET','POST'])
@@ -310,7 +313,7 @@ def searchstudent():
       print("ERROR! Tried " + cursor.mogrify("select * from student_info where lastname = %s and firstname = %s;", (request.form['lname'], request.form['fname']) ) )    
   
   
-    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
+    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = session['userIsAdmin'], studentView=session['userIsStudent'], failedSresult=failedSresult)
 
 #Student viewing their own progress report
 @app.route('/mychecksheet', methods=['GET','POST'])
@@ -358,7 +361,7 @@ def searchownchecksheet():
       print("ERROR! Tried " + cursor.mogrify("select * from student_info where email = %s;", (request.form['lname'], request.form['fname']) ) )    
   
   
-    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = userIsAdmin, failedSresult=failedSresult)
+    return render_template('listofstudent.html', loggedIn=session['loggedIn'],  user=session['username'], studentList=studentList, adminView = session['userIsAdmin'], studentView=session['userIsStudent'], failedSresult=failedSresult)
 
 
 #Uploading CSV file
@@ -399,7 +402,7 @@ def upload():
       uploadFailed = True 
   
   
-   return render_template('uploaded.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = userIsAdmin, uploadFailed = uploadFailed)
+   return render_template('uploaded.html', loggedIn=session['loggedIn'],  user=session['username'], adminView = session['userIsAdmin'], studentView=session['userIsStudent'], uploadFailed = uploadFailed)
 
 # start the server
 if __name__ == '__main__':
