@@ -39,6 +39,7 @@ def mainIndex():
     announcementCount = 0
     announceList = []
         
+        
     print("BEFORE POST")
 
      # if user typed in a post ...
