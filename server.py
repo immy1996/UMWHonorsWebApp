@@ -57,20 +57,20 @@ def mainIndex():
          if returnedUserInfo:
             print("user credentials found...")
             SignedInButton = False
-            session['username'] = session.get('username', '') + username
-            session['loggedIn']= session.get('loggedIn', '') + True 
+            session['username'] = username
+            session['loggedIn']= True 
               
             if returnedUserInfo[2] == 'y':
-               session['userIsAdmin']= session.get('userIsAdmin', '') + True
+               session['userIsAdmin']= True
                session['userIsStudent']=False
             else:
-               session['userIsAdmin']= session.get('userIsAdmin', '') + False
+               session['userIsAdmin']= False
                session['userIsStudent']=True
          else:
             session['loggedIn']=False
             session['username']=''
             SignedInButton = True
-            session['userIsAdmin']= session.get('userIsAdmin', '') + False
+            session['userIsAdmin']= False
             session['userIsStudent']=False
             print("*********LOGIN IS UNSUCCESSFULL*********")
             return redirect(url_for('errorLogin'))
@@ -118,7 +118,7 @@ def mainIndex():
 
    connection.commit()
 
-   return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['userIsAdmin'], studentView=session['userIsStudent'], announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
+   return render_template('home.html', loggedIn=session.get('loggedIn'), user=session.get('username'), adminView=session.get('userIsAdmin'), studentView=session.get('userIsStudent'), announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
 
 #Login error page
 @app.route('/loginerror', methods=['GET', 'POST'])
