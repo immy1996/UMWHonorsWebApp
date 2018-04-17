@@ -53,4 +53,10 @@ sudo sudo -u postgres psql
 ### Setting password in postgres
 \password (The password you want it to be)
 
+<br />
+### Importing the SQL file
+cd "directory with sql file"
+sudo psql -U postgres -h localhost
+\i server.sql
+
 <b>Created by Imran Ahmed, Shane McSally, and Luke Payne</b>
