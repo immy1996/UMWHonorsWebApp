@@ -38,7 +38,7 @@ def mainIndex():
    returnedUserInfo = ''
    announcementCount = 0
    announceList = []
-        
+   
         
    print("BEFORE POST")
 
@@ -50,6 +50,10 @@ def mainIndex():
       try: 
          cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
          returnedUserInfo = cursor.fetchone()
+
+         session['userIsAdmin'] = 0
+         session['loggedIn'] = 0
+         session['userIsStudent'] = 0
 
          #If a user-pwd combo was found and it matches then log the person in
          if returnedUserInfo:
