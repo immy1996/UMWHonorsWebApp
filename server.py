@@ -17,7 +17,7 @@ def connectToDB():
    connectionString = 'dbname=honors_program user=umwhonors password=umw host=localhost'
    #os.environ['DATABASE_URL']
    try:
-      return psycopg2.connect(connectionString)
+      return psycopg2.connect(os.environ['DATABASE_URL'])
    except:
       print("Can't connect to database")
 
@@ -51,28 +51,26 @@ def mainIndex():
          cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
          returnedUserInfo = cursor.fetchone()
 
-         session['userIsAdmin'] = 0
-         session['loggedIn'] = 0
-         session['userIsStudent'] = 0
+
 
          #If a user-pwd combo was found and it matches then log the person in
          if returnedUserInfo:
             print("user credentials found...")
             SignedInButton = False
-            session['username'] = username
-            session['loggedIn']=True 
+            session['username'] = session.get('username', '') + username
+            session['loggedIn']= session.get('loggedIn', '') + True 
               
             if returnedUserInfo[2] == 'y':
-               session['userIsAdmin']=True
+               session['userIsAdmin']= session.get('userIsAdmin', '') + True
                session['userIsStudent']=False
             else:
-               session['userIsAdmin']=False
+               session['userIsAdmin']= session.get('userIsAdmin', '') + False
                session['userIsStudent']=True
          else:
             session['loggedIn']=False
             session['username']=''
             SignedInButton = True
-            session['userIsAdmin']=False
+            session['userIsAdmin']= session.get('userIsAdmin', '') + False
             session['userIsStudent']=False
             print("*********LOGIN IS UNSUCCESSFULL*********")
             return redirect(url_for('errorLogin'))
