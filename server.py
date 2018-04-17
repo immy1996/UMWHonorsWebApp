@@ -292,7 +292,7 @@ def searchstudent():
     studentList = []  
 
     try:    
-      mogstudentResult = cursor.mogrify("select * from student_info where lastname = %s and firstname = %s;", (request.form['lname'], request.form['fname']) )
+      mogstudentResult = cursor.mogrify("select * from student_info where lower(lastname) = lower(%s) and lower(firstname) = lower(%s);", (request.form['lname'], request.form['fname']) )
       print("BEFORE MOGALLANNOUNCE")
       print(mogstudentResult)
       cursor.execute(mogstudentResult)
