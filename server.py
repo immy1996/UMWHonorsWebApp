@@ -26,7 +26,7 @@ def connectToDB():
 def mainIndex():
    #connecting to database
    connection = connectToDB()
-   #cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+   #cursor =connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
    cursor = connection.cursor()
    try:
       print('User: ' + session['username'])
