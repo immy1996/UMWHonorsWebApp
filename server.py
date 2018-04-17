@@ -24,72 +24,70 @@ def connectToDB():
 
 @app.route('/', methods=['GET', 'POST'])
 def mainIndex():
-    #connecting to database
-    connection = connectToDB()
-    #cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cursor = connection.cursor()
-    try:
-        print('User: ' + session['username'])
-    except:
-        session['username'] = ''
+   #connecting to database
+   connection = connectToDB()
+   #cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+   cursor = connection.cursor()
+   try:
+      print('User: ' + session['username'])
+   except:
+      session['username'] = ''
 
-    global failedSresult
-    global SignedInButton
-    returnedUserInfo = ''
-    announcementCount = 0
-    announceList = []
+   global failedSresult
+   global SignedInButton
+   returnedUserInfo = ''
+   announcementCount = 0
+   announceList = []
         
         
-    print("BEFORE POST")
+   print("BEFORE POST")
 
-     # if user typed in a post ...
-    if request.method == 'POST':
-          username = request.form['userName']
-          print('incoming username ' + username)
-          pw = request.form['pw']
-          try: 
-            
-            cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
-            
-            returnedUserInfo = cursor.fetchone()
+   # if user typed in a post ...
+   if request.method == 'POST':
+      username = request.form['userName']
+      print('incoming username ' + username)
+      pw = request.form['pw']
+      try: 
+         cursor.execute("SELECT student_info.email, user_info.userid, user_info.isadmin FROM student_info FULL OUTER JOIN user_info ON (student_info.email = userid) WHERE (student_info.email = %s AND dupont_code = crypt(%s, dupont_code)) OR (user_info.userid = %s AND user_info.password = %s);", (username, pw, username, pw))
+         returnedUserInfo = cursor.fetchone()
 
-            #If a user-pwd combo was found and it matches then log the person in
-            if returnedUserInfo:
-              print("user credentials found...")
-              SignedInButton = False
-              session['username'] = username
-              session['loggedIn']=True 
+         #If a user-pwd combo was found and it matches then log the person in
+         if returnedUserInfo:
+            print("user credentials found...")
+            SignedInButton = False
+            session['username'] = username
+            session['loggedIn']=True 
               
-              if returnedUserInfo[2] == 'y':
-                session['userIsAdmin']=True
-                session['userIsStudent']=False
-              else:
-                session['userIsAdmin']=False
-                session['userIsStudent']=True
+            if returnedUserInfo[2] == 'y':
+               session['userIsAdmin']=True
+               session['userIsStudent']=False
             else:
-                session['loggedIn']=False
-                session['username']=''
-                SignedInButton = True
-                session['userIsAdmin']=False
-                session['userIsStudent']=False
-                print("*********LOGIN IS UNSUCCESSFULL*********")
-                return redirect(url_for('errorLogin'))
+               session['userIsAdmin']=False
+               session['userIsStudent']=True
+         else:
+            session['loggedIn']=False
+            session['username']=''
+            SignedInButton = True
+            session['userIsAdmin']=False
+            session['userIsStudent']=False
+            print("*********LOGIN IS UNSUCCESSFULL*********")
+            return redirect(url_for('errorLogin'))
 
-          except:
-            print("Error accesing from users table when logging in")
-    print('Username: ' + session['username'])
-    if session['username'] == '':
-        session['loggedIn'] = False
-        print("Nobody is currently logged in.") 
-    else:
-       session['loggedIn'] = True
-       print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
+      except:
+         print("Error accesing from users table when logging in")
+         print('Username: ' + session['username'])
+         if session['username'] == '':
+            session['loggedIn'] = False
+            print("Nobody is currently logged in.") 
+         else:
+            session['loggedIn'] = True
+            print('User: ' + session['username'] + ' is logged in, this is in MAIN FUNCTION')
 
-    print("AFTER POST")
+   print("AFTER POST")
 
-    print("VIEWING LATEST ANNOUNCEMENT")
-    #announcements
-    try:
+   print("VIEWING LATEST ANNOUNCEMENT")
+   #announcements
+   try:
       mogAnnounce = cursor.mogrify("select * from announcements;")
       print(mogAnnounce)
       cursor.execute(mogAnnounce)
@@ -100,8 +98,8 @@ def mainIndex():
       print("ANNOUNCEMENTCOUNT")
       print(announcementCount)
       print(type(announcementCount))
-      
-      
+   
+   
       print("BEFORE MOGRIFY")
       announceInfo = cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, ))
       print(announceInfo)
@@ -112,13 +110,13 @@ def mainIndex():
       print(announceList)
       print(type(announceList))
 
-    except:
+   except:
       print(cursor.mogrify("select * from announcements where postid = %s;", (announcementCount, )))
 
 
-    connection.commit()
+   connection.commit()
 
-    return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['userIsAdmin'], studentView=session['userIsStudent'], announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
+   return render_template('home.html', loggedIn=session['loggedIn'], user=session['username'], adminView=session['userIsAdmin'], studentView=session['userIsStudent'], announceList = announceList, failedSresult=failedSresult, failed = SignedInButton)
 
 #Login error page
 @app.route('/loginerror', methods=['GET', 'POST'])
