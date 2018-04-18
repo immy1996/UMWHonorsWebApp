@@ -1,0 +1,41 @@
+.card-img-top {
+   width: 100% !important;
+   height: 100% !important;
+   object-fit: cover !important;
+}
+
+.panel-heading{
+   background-color: #0275d8;
+   text-align: left;
+   color: white;
+   padding: 2%;
+}
+
+.panel-body{
+   padding: 5px;
+}
+
+.panel{
+   border: 1px solid #0275d8;
+   border-radius: 4px;
+}
+
+.panel-umw > .panel-heading{
+   background-color: #002b5a;
+}
+
+.panel-umw > .panel-heading-final{
+   color: white;
+   padding: 2%;
+   text-align: center;
+}
+
+.panel-umw > .panel-heading-test{
+   color: white;
+   padding: 2%;
+   text-align: center;
+}
+
+.student-container{
+   width: 100%;
+}
